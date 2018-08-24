@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	h1= title
+	p База даных садовых и полевых растений
+	<hr>
+	table(style='width:100%', border='1')
+		tbody
+			each item in cursor
+				tr 
+					td(style='width:1%') 
+						img.image(src = 'data:image/jpeg;base64, ' + item.img)
+					td Наименование: <strong>#{item.name}</strong> <br/> Латинское наименование: <strong>#{item.name_lat}</strong> <br/> 
+						a(href = item.url) Википедия
+
