@@ -1,15 +1,23 @@
+var express = require('express');
+var router = express.Router();
 const fs = require('fs');
 const btoa = require('btoa');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const url = 'mongodb://localhost:27017';
+const dbName = 'Test';
+const collName = 'Garden_Plant';
+
 const read_pict = (file) => {
 	return btoa(String.fromCharCode(...new Uint8Array(fs.readFileSync(file))));
 };
 
-exports.create_test = function (url, dbName, collName) {
+//create_test = function (url, dbName, collName) {
 //	const url = 'mongodb://localhost:27017';
 //	const dbName = 'Test';
 //	const collName = 'Garden_Plant';
+
+router.get('/', function(req, res, next) {
 	const dbplant = [
 		{	name: 'Ромашка',	
 			name_lat: 'Matricaria', 
@@ -31,10 +39,10 @@ exports.create_test = function (url, dbName, collName) {
 			name_lat: 'Sónchus', 
 			url: 'https://ru.wikipedia.org/wiki/%D0%9E%D1%81%D0%BE%D1%82',
 			img: read_pict('./test_data/pic003.jpg') }
-		];
+	];
 	MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
 		assert.equal(null, err);
-		console.log('Connected successfully to server');
+		console.log('Connected successfully to DB server');
 		const db = client.db(dbName);
 		db.collections(function(err, coll){
 			if (coll.find(e => e.s.name === collName)) { 
@@ -44,16 +52,18 @@ exports.create_test = function (url, dbName, collName) {
 					if (ok) { console.log('Collection deleted')}
 				});
 			};
-			db.collection(collName).insertMany(dbplant, function(err, res){ 
+			db.collection(collName).insertMany(dbplant, function(err, resdb){ 
 				if (err) { throw err; }
-				console.log('Added', res.insertedCount); 
+				console.log('Added', resdb.insertedCount); 
 				client.close();
+				res.redirect('/');
+//				next();
 			});
 		});		
 	});
-};
+});
 
-//export default create_test;
+module.exports=router;
 	
 
 

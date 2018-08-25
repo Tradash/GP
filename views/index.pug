@@ -4,6 +4,9 @@ block content
 	h1= title
 	p База даных садовых и полевых растений
 	<hr>
+	button(onclick="location.href='http://192.168.1.155:3000/defbase'")
+		img(src='./images/testdb.jpg', style='vertical-align:middle', width = '10%') 
+		|Загрузить тестовую базу
 	table(style='width:100%', border='1')
 		tbody
 			each item in cursor
