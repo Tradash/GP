@@ -19,10 +19,13 @@ router.get('/', function(req, res, next) {
 			if (err) { throw err; }
 				else if (cursor.length) {
 					/* GET home page. */
-					console.log(cursor.length);
+					console.log(cursor.length, cursor[0]._id);
 					res.render('index', { title: 'Тестовое приложения', cursor: cursor });
 				}
-					else {console.log('No document in DB')}
+					else {
+						console.log('No document in DB')
+					  res.render('index', { title: 'Тестовое приложения, База пуста', cursor : null });
+					}
 			client.close;
 		});		
 	});

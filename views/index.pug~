@@ -1,18 +1,25 @@
 extends layout
-
 block content
+	link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 	h1= title
 	p База даных садовых и полевых растений
 	<hr>
-	button(onclick="location.href='http://192.168.1.155/defbase'")
-		img(src='./images/testdb.jpg', style='vertical-align:middle', width = '10%') 
+	button(onclick="location.href='/defbase'", class='myTestDBButton')
 		|Загрузить тестовую базу
+	if (cursor) 
 	table(style='width:100%', border='1')
 		tbody
 			each item in cursor
 				tr 
 					td(style='width:1%') 
 						img.image(src = 'data:image/jpeg;base64, ' + item.img)
-					td Наименование: <strong>#{item.name}</strong> <br/> Латинское наименование: <strong>#{item.name_lat}</strong> <br/> 
+					td(style='position:relative') Наименование: <strong>#{item.name}</strong> <br/> Латинское наименование: <strong>#{item.name_lat}</strong> <br/> 
 						a(href = item.url) Википедия
+						div(class='myDivTableButton')
+							button(style='font-size:16px')
+								| Редактировать 
+								i.fa.fa-edit
+							button(style='font-size:16px', onclick="location.href='/delete/"+item._id+"'")
+								| Удалить
+								i.fa.fa-trash
 
