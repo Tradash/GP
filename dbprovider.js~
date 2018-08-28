@@ -4,7 +4,6 @@ const btoa = require('btoa');
 const mongodb = require('mongodb');
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
-const mongodb = require('mongodb');
 
 const dbUrl = 'localhost';
 const dbPort = 27017;
@@ -13,31 +12,31 @@ const collName = 'Garden_Plant';
 //const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 
-const read_pict = (file) => {
-	return btoa(String.fromCharCode(...new Uint8Array(fs.readFileSync(file))));
+const read_pict = (buff) => {
+	return btoa(String.fromCharCode(...new Uint8Array(buff)))};
 };
 
 const dbplant = [
 	{	name: 'Ромашка',	
 		name_lat: 'Matricaria', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%A0%D0%BE%D0%BC%D0%B0%D1%88%D0%BA%D0%B0',
-		img: read_pict('./test_data/pic001.jpg') },
+		img: read_pict(fs.readFileSync('./test_data/pic001.jpg')) },
 	{	name: 'Дудник',	
 		name_lat: 'Angélica', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%94%D1%83%D0%B4%D0%BD%D0%B8%D0%BA',
-		img: read_pict('./test_data/pic002.jpg') },
+		img: read_pict(fs.readFileSync('./test_data/pic002.jpg')) },
 	{	name: 'Земляника',	
 		name_lat: 'Fragária', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%97%D0%B5%D0%BC%D0%BB%D1%8F%D0%BD%D0%B8%D0%BA%D0%B0',
-		img: read_pict('./test_data/pic004.jpg') },
+		img: read_pict(fs.readFileSync('./test_data/pic003.jpg')) },
 	{	name: 'Иван-да-марья',	
 		name_lat: 'Melampýrum nemorósum', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%9C%D0%B0%D1%80%D1%8C%D1%8F%D0%BD%D0%BD%D0%B8%D0%BA_%D0%B4%D1%83%D0%B1%D1%80%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9',
-		img: read_pict('./test_data/pic005.jpg') },
+		img: read_pict(fs.readFileSync('./test_data/pic004.jpg')) },
 	{	name: 'Осот',	
 		name_lat: 'Sónchus', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%9E%D1%81%D0%BE%D1%82',
-		img: read_pict('./test_data/pic003.jpg') }
+		img: read_pict(fs.readFileSync('./test_data/pic005.jpg')) }
 ];
 
 const doItDB = (func) => {
@@ -83,8 +82,11 @@ const delRecord = (id, finfunc) => {
 	doItDB(dr);
 };
 
+
+
 module.exports = {
 	doItDB: doItDB,
 	AddDefDB: AddDefDB,
-	delRecord: delRecord
+	delRecord: delRecord,
+	read_pict: read_pict
 }

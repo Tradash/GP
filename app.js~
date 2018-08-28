@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
 var defbaseRouter = require('./routes/defbaseRouter');
 var delRecord = require('./routes/delRecord');
+var editRecord = require('./routes/editRecord');
 
 
 
@@ -23,13 +24,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/delete/:id', delRecord);
+
+
 app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/defbase', defbaseRouter);
+app.use('/delete', delRecord);
+app.post('/edit/:idd', function(req, res) {
+console.log('=====', req.body, req.query)
+	res.send('welcom');
+})
+app.use('/edit', editRecord);
 
 
-/*
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -45,5 +52,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-*/
+
 module.exports = app;

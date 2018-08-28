@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
 				}
 					else {
 						console.log('No document in DB')
-					  res.render('index', { title: 'Тестовое приложения, База пуста' });
+					  res.render('index', { title: 'Тестовое приложения, База пуста', cursor : null });
 					}
 			client.close;
 		});		

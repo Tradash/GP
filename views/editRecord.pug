@@ -1,0 +1,45 @@
+extends layout
+
+block content
+
+	h1= title
+	p База даных садовых и полевых растений
+	<hr>
+	if imgfile === 'old'
+		- encType = 'multipart/form-data'
+		- textinfo = 'Сначала загрузите картинку'
+		- f_dis = 'disabled'
+		//- f_dis1 = ' '
+	else
+		-	encType = 'aplication/json'	
+		- textinfo = 'Заполните остальные поля'
+		- f_dis1 = 'disabled'
+		//- f_dis = ' '
+	h3= textinfo
+	<hr>	
+	form(method='post', enctype= encType, id='myForm')
+		div
+			input(type='hidden', name= 'id', value = cursor._id)
+			input(type='hidden', name= 'imgfile', value = imgfile)
+			span Наименование: 
+			input(type='text', name = 'name', value=cursor.name, disabled = f_dis)
+			<br><br>
+			span Латинское название: 
+			input(type='text', name = 'name_lat',  value=cursor.name_lat, disabled=f_dis)
+			<br><br>
+			span Ссылка на Вики: 
+			input(type='text', name = 'url', value=cursor.url, disabled = f_dis)
+			div
+				img.image(style='width:15%', src = 'data:image/jpeg;base64, ' + cursor.img)
+				span  Загрузите изображение: 
+				input(type='file', name = 'img', accept='image/*, image/jpeg', disabled = f_dis1)
+				input(type='button', value = 'Загрузить', onclick='loadimg()', disabled = f_dis1)
+				script.
+					function loadimg() {
+						document.getElementById('myForm').submit();
+					}
+			div
+			<hr>
+			input(type='submit', id='btn_submit', value='Сохранить', disabled = f_dis )
+			<hr>
+		<a href='/'> Назад на главную

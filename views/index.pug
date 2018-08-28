@@ -6,20 +6,27 @@ block content
 	<hr>
 	button(onclick="location.href='/defbase'", class='myTestDBButton')
 		|Загрузить тестовую базу
-	if cursor 
+	if cursor
+		-x = 0 
 		table(style='width:100%', border='1')
 			tbody
 				each item in cursor
+					- x ++
 					tr 
 						td(style='width:1%') 
 							img.image(src = 'data:image/jpeg;base64, ' + item.img)
 						td(style='position:relative') Наименование: <strong>#{item.name}</strong> <br/> Латинское наименование: <strong>#{item.name_lat}</strong> <br/> 
 							a(href = item.url) Википедия
 							div(class='myDivTableButton')
-								button(style='font-size:16px')
+								button(style='font-size:16px', onclick="location.href='/edit/"+item._id+"'")
 									| Редактировать 
 									i.fa.fa-edit
-								button(style='font-size:16px', onclick="location.href='/delete/"+item._id+"'")
+								button(style='font-size:16px', onclick='myfuncdel'+x+'()')
 									| Удалить
 									i.fa.fa-trash
-
+									script.
+										function myfuncdel#{x}() {
+										if (confirm('Вы действительно хотите удалить запись:' + '#{item.name}')) {
+											document.location.href = '/delete/'+'#{item._id}'
+										}
+										}
