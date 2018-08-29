@@ -2,17 +2,13 @@ var express = require('express');
 var router = express.Router();
 const multer = require('multer');
 
-
-// === begin my kod
 const assert = require('assert');
+const fs = require('fs');
 const doItDB = require('../dbprovider.js').doItDB;
 const read_pict = require('../dbprovider.js').read_pict;
 const collName = require('../dbprovider.js').collName;
 const collTmp = require('../dbprovider.js').collTmp;
 const mongodb = require('mongodb');
-//const MongoClient = require('mongodb').MongoClient;
-//const url = 'mongodb://localhost:27017';
-//const dbName = 'Test';
 const show_max = 3;
 
 const storage = multer.memoryStorage();
@@ -27,20 +23,18 @@ router.post('/:idd', upload.single('img'), function(req, res, next) {
 			// Сохранение изображения во временной базе
 			const buff = read_pict(req.file.buffer); 
 			db.collection(collTmp).insertOne({idold: id, img: buff });
-			myquery = {_id : new mongodb.ObjectID(id)};
+			const cursor = {
+				_id: id,
+				name: 'Введите название',
+				name_lat: 'Введите латинское название',
+				url: 'Вставте ссылку на википедию',
+				img: buff };
 			// Создание формы для ввода оставшихся полей
-			db.collection(collName).findOne(myquery, function(err, doc){
-				if (err) { throw err; }
-					else {
-//						console.log(cursor.length, doc._id);
-						doc.img = buff;
-						res.render('editRecord', { 
-							title: 'Редактирование записи (изображение загружено)', 
-							cursor: doc, 
-							imgfile: 'new' });
-						cli.close();
-					}
-			});
+				res.render('editRecord', { 
+					title: 'Редактирование новой записи (изображение загружено)', 
+					cursor: cursor, 
+					imgfile: 'new' });
+					cli.close(); 
 		} else {
 			doItDB((db, cli)=>{
 				myquery = {idold: id};
@@ -48,15 +42,14 @@ router.post('/:idd', upload.single('img'), function(req, res, next) {
 				db.collection(collTmp).findOne(myquery, function(err, doc){
 					if (err) { throw err; }
 					else {
-						let myquery = {_id : new mongodb.ObjectID(id)};
-						const newRec = { $set: {
+						const newRec = { 
 							name: req.body.name,	
 							name_lat: req.body.name_lat, 
 							url: req.body.url,
 							img: doc.img
-						}};
+						};
 						// Обновляем запись в БД
-						db.collection(collName).findOneAndUpdate(myquery,	newRec,
+						db.collection(collName).insert(newRec,
 							function(err, r) {
 								if (err) { throw err; }
 									else {
@@ -79,22 +72,14 @@ router.post('/:idd', upload.single('img'), function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-	doItDB((db, cli)=>{
-		const id = req.params.id;
-		let myquery = {_id : new mongodb.ObjectID(id)};
-		db.collection(collName).find(myquery).toArray(function(err, cursor){
-			if (err) { throw err; }
-				else if (cursor.length) {
-					console.log(cursor.length, cursor[0]._id);
-					res.render('editRecord', { title: 'Редактирование записи', cursor: cursor[0], imgfile: 'old' });
-				}
-					else {
-						console.log('No document in DB')
-					  res.render('index', { title: 'Тестовое приложения, Запись не найдена', cursor : null });
-					}
-			cli.close;
-		});		
-	});
+	const cursor = {
+	_id: id = req.params.id,
+	name: 'Введите название',
+	name_lat: 'Введите латинское название',
+	url: 'Вставте ссылку на википедию',
+	img: read_pict(fs.readFileSync('./test_data/testdb.jpg'))  };
+	res.render('editRecord', { title: 'Создание новой записи', cursor: cursor, imgfile: 'old' });
 });
+	
 
 module.exports = router;

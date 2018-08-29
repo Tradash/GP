@@ -9,7 +9,7 @@ var indexRouter = require('./routes/index');
 var defbaseRouter = require('./routes/defbaseRouter');
 var delRecord = require('./routes/delRecord');
 var editRecord = require('./routes/editRecord');
-
+var editNew = require('./routes/editNew');
 
 
 var app = express();
@@ -35,6 +35,7 @@ app.use('/delete', delRecord);
 //	res.send('welcom');
 //})
 app.use('/edit', editRecord);
+app.use('/new', editNew);
 
 
 // catch 404 and forward to error handler

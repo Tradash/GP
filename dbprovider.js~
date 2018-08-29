@@ -9,14 +9,16 @@ const dbUrl = 'localhost';
 const dbPort = 27017;
 const dbName = 'Test';
 const collName = 'Garden_Plant';
+const collTmp = 'temp_pict';
 //const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 
+// Обработка изображения в буффере для сохранения в mongodb
 const read_pict = (buff) => {
-	return btoa(String.fromCharCode(...new Uint8Array(buff)))};
+	return btoa(String.fromCharCode(...new Uint8Array(buff)))
 };
 
-const dbplant = [
+const dbplant = [ 
 	{	name: 'Ромашка',	
 		name_lat: 'Matricaria', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%A0%D0%BE%D0%BC%D0%B0%D1%88%D0%BA%D0%B0',
@@ -88,5 +90,7 @@ module.exports = {
 	doItDB: doItDB,
 	AddDefDB: AddDefDB,
 	delRecord: delRecord,
-	read_pict: read_pict
+	read_pict: read_pict,
+	collName: collName,
+	collTmp: collTmp
 }

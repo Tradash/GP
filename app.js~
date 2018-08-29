@@ -9,7 +9,7 @@ var indexRouter = require('./routes/index');
 var defbaseRouter = require('./routes/defbaseRouter');
 var delRecord = require('./routes/delRecord');
 var editRecord = require('./routes/editRecord');
-
+var editNew = require('./routes/editNew');
 
 
 var app = express();
@@ -30,11 +30,12 @@ app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/defbase', defbaseRouter);
 app.use('/delete', delRecord);
-app.post('/edit/:idd', function(req, res) {
-console.log('=====', req.body, req.query)
-	res.send('welcom');
-})
+//app.post('/edit/:idd', function(req, res) {
+//console.log('=====', req.body, req.query)
+//	res.send('welcom');
+//})
 app.use('/edit', editRecord);
+app.use('/new', editnew);
 
 
 // catch 404 and forward to error handler

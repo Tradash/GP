@@ -9,14 +9,16 @@ const dbUrl = 'localhost';
 const dbPort = 27017;
 const dbName = 'Test';
 const collName = 'Garden_Plant';
+const collTmp = 'temp_pict';
 //const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 
+// Обработка изображения в буффере для сохранения в mongodb
 const read_pict = (buff) => {
 	return btoa(String.fromCharCode(...new Uint8Array(buff)))
 };
-
-const dbplant = [
+// Данные для тестовой загрузки
+const dbplant = [ 
 	{	name: 'Ромашка',	
 		name_lat: 'Matricaria', 
 		url: 'https://ru.wikipedia.org/wiki/%D0%A0%D0%BE%D0%BC%D0%B0%D1%88%D0%BA%D0%B0',
@@ -38,7 +40,7 @@ const dbplant = [
 		url: 'https://ru.wikipedia.org/wiki/%D0%9E%D1%81%D0%BE%D1%82',
 		img: read_pict(fs.readFileSync('./test_data/pic005.jpg')) }
 ];
-
+// Функция для подключения к БД
 const doItDB = (func) => {
 	MongoClient.connect(url, { useNewUrlParser: true }, function (err, client) {
 		if (err) { throw err;} 
@@ -47,7 +49,7 @@ const doItDB = (func) => {
 		func(db, client);
 	});
 };
-	
+// Очистка БД и загрузка тестовых данных
 const AddDefDB = (finfunc) => {
 	const defdb = (db, cli) => {
 		db.collections(function(err, coll){
@@ -67,7 +69,7 @@ const AddDefDB = (finfunc) => {
 	}
 	doItDB(defdb);
 };
-
+// Удаление одной записи из БД 
 const delRecord = (id, finfunc) => {
 	const dr = (db, cli) => {
 		let myquery = {_id : new mongodb.ObjectID(id)};
@@ -88,5 +90,7 @@ module.exports = {
 	doItDB: doItDB,
 	AddDefDB: AddDefDB,
 	delRecord: delRecord,
-	read_pict: read_pict
+	read_pict: read_pict,
+	collName: collName,
+	collTmp: collTmp
 }
