@@ -3,6 +3,7 @@ block content
 	link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 	link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.2.0/css/all.css' integrity='sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ', crossorigin='anonymous')
 	h1= title
+	a(href = 'https://github.com/tradash/gp') Описание на Github
 	p База даных садовых и полевых растений
 	<hr>
 	table(style='width:100%')
@@ -47,7 +48,7 @@ block content
 					tr 
 						td(style='width:1%') 
 							img.image(src = 'data:image/jpeg;base64, ' + item.img, width = '200px')
-						td(style='position:relative') Наименование: <strong>#{item.name}</strong> <br/> Латинское наименование: <strong>#{item.name_lat}</strong> <br/> 
+						td(class='tdinfo') Наименование: <strong>#{item.name}</strong> <br/> Латинское наименование: <strong>#{item.name_lat}</strong> <br/>
 							a(href = item.url) Википедия
 							div(class='myDivTableButton')
 								button(style='font-size:16px', onclick="location.href='/edit/"+item._id+"'")

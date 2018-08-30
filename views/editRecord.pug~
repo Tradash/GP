@@ -9,12 +9,12 @@ block content
 		- encType = 'multipart/form-data'
 		- textinfo = 'Сначала загрузите картинку'
 		- f_dis = 'disabled'
-		- f_dis1 = ' '
+		//- f_dis1 = ' '
 	else
 		-	encType = 'aplication/json'	
 		- textinfo = 'Заполните остальные поля'
 		- f_dis1 = 'disabled'
-		- f_dis = ' '
+		//- f_dis = ' '
 	h3= textinfo
 	<hr>	
 	form(method='post', enctype= encType, id='myForm')
@@ -22,13 +22,13 @@ block content
 			input(type='hidden', name= 'id', value = cursor._id)
 			input(type='hidden', name= 'imgfile', value = imgfile)
 			span Наименование: 
-			input(type='text', name = 'name', value=cursor.name, disabled = f_dis)
+			input(type='text', name = 'name', value=cursor.name, disabled = f_dis, placeholder=cursor.name)
 			<br><br>
 			span Латинское название: 
-			input(type='text', name = 'name_lat',  value=cursor.name_lat, disabled=f_dis)
+			input(type='text', name = 'name_lat',  value=cursor.name_lat, disabled=f_dis, placeholder=cursor.name_lat )
 			<br><br>
 			span Ссылка на Вики: 
-			input(type='text', name = 'url', value=cursor.url, disabled = f_dis)
+			input(type='text', name = 'url', value=cursor.url, disabled = f_dis, placeholder=cursor.url)
 			div
 				img.image(style='width:15%', src = 'data:image/jpeg;base64, ' + cursor.img)
 				span  Загрузите изображение: 

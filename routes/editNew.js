@@ -33,7 +33,7 @@ router.post('/:idd', upload.single('img'), function(req, res, next) {
 				res.render('editRecord', { 
 					title: 'Редактирование новой записи (изображение загружено)', 
 					cursor: cursor, 
-					imgfile: 'new' });
+					imgfile: 'newnew' });
 					cli.close(); 
 		} else {
 			doItDB((db, cli)=>{

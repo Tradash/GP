@@ -12,9 +12,10 @@ const show_max = 3;
 let myquery;
 
 router.get('/', function(req, res, next) {
-	if(req.query.f) { myquery = {name: { '$regex' : req.query.f, '$options': 'i' }};	}
+	if(req.query.f) { myquery = {'$or': [ {name: { '$regex' : req.query.f, '$options': 'i' }}, 
+																			  {name_lat: { '$regex' : req.query.f, '$options': 'i' }}]}}
 		else { myquery = {};}
-	console.log('*****', myquery);
+	console.log('*****', myquery, req.ip);
 	MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
 		assert.equal(null, err);
 		console.log('Connected successfully to DB');
@@ -23,7 +24,7 @@ router.get('/', function(req, res, next) {
 			if (err) { throw err; }
 				else if (cursor.length) {
 					db.collection(collName).count(function(err, colrec){
-						res.render('index', { title: 'Тестовое приложения', cursor: cursor, bdcount: colrec, bdshow: cursor.length  });
+						res.render('index', { title: 'Тестовое приложениe', cursor: cursor, bdcount: colrec, bdshow: cursor.length  });
 						client.close;
 					});
 				}

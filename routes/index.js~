@@ -12,7 +12,8 @@ const show_max = 3;
 let myquery;
 
 router.get('/', function(req, res, next) {
-	if(req.query.f) { myquery = {name: { '$regex' : req.query.f, '$options': 'i' }};	}
+	if(req.query.f) { myquery = {'$or': [ {name: { '$regex' : req.query.f, '$options': 'i' }}, 
+																			  {name_lat: { '$regex' : req.query.f, '$options': 'i' }}]}}
 		else { myquery = {};}
 	console.log('*****', myquery);
 	MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
@@ -22,14 +23,16 @@ router.get('/', function(req, res, next) {
 		db.collection(collName).find(myquery).toArray(function(err, cursor){
 			if (err) { throw err; }
 				else if (cursor.length) {
-					console.log(cursor.length, cursor[0]._id);
-					res.render('index', { title: 'Тестовое приложения', cursor: cursor, bdcount: 10, bdshow: 5  });
+					db.collection(collName).count(function(err, colrec){
+						res.render('index', { title: 'Тестовое приложениe', cursor: cursor, bdcount: colrec, bdshow: cursor.length  });
+						client.close;
+					});
 				}
 					else {
 						console.log('No document in DB')
 					  res.render('index', { title: 'Тестовое приложения, База пуста', cursor: null, bdcount: 0, bdshow: 0 });
+					  client.close;
 					}
-			client.close;
 		});		
 	});
 });

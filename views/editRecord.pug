@@ -5,6 +5,7 @@ block content
 	h1= title
 	p База даных садовых и полевых растений
 	<hr>
+	// Определяем какой это проход и в зависемости от этого дисейблим определенные поля
 	if imgfile === 'old'
 		- encType = 'multipart/form-data'
 		- textinfo = 'Сначала загрузите картинку'
@@ -15,6 +16,15 @@ block content
 		- textinfo = 'Заполните остальные поля'
 		- f_dis1 = 'disabled'
 		//- f_dis = ' '
+	// Если новая запись, убираем в полях value	
+	if imgfile === 'newnew'	
+		- fname = ''
+		- fnamelat = ''
+		- furl = ''
+	else
+		- fname = cursor.name
+		- fnamelat = cursor.name_lat
+		- furl = cursor.url
 	h3= textinfo
 	<hr>	
 	form(method='post', enctype= encType, id='myForm')
@@ -22,13 +32,13 @@ block content
 			input(type='hidden', name= 'id', value = cursor._id)
 			input(type='hidden', name= 'imgfile', value = imgfile)
 			span Наименование: 
-			input(type='text', name = 'name', value=cursor.name, disabled = f_dis)
+			input(type='text', name = 'name', value=fname, disabled = f_dis, placeholder=cursor.name)
 			<br><br>
 			span Латинское название: 
-			input(type='text', name = 'name_lat',  value=cursor.name_lat, disabled=f_dis)
+			input(type='text', name = 'name_lat',  value=fnamelat, disabled=f_dis, placeholder=cursor.name_lat )
 			<br><br>
 			span Ссылка на Вики: 
-			input(type='text', name = 'url', value=cursor.url, disabled = f_dis)
+			input(type='text', name = 'url', value=furl, disabled = f_dis, placeholder=cursor.url)
 			div
 				img.image(style='width:15%', src = 'data:image/jpeg;base64, ' + cursor.img)
 				span  Загрузите изображение: 
