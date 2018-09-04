@@ -5,6 +5,7 @@ const multer = require('multer');
 const assert = require('assert');
 const fs = require('fs');
 const doItDB = require('../dbprovider.js').doItDB;
+const loadFR = require('../dbprovider.js').loadFR;
 const read_pict = require('../dbprovider.js').read_pict;
 const collName = require('../dbprovider.js').collName;
 const collTmp = require('../dbprovider.js').collTmp;
@@ -17,30 +18,43 @@ let myquery;
 
 //upload.single('image'),
 router.post('/:idd', upload.single('img'), function(req, res, next) {
-	doItDB((db, cli)=>{
+	doItDB((err, db, cli)=>{
+		if (err) { return next(err); }
 		const id = req.params.idd;
 		if (!req.body.name) {
 			// Сохранение изображения во временной базе
-			const buff = read_pict(req.file.buffer); 
-			db.collection(collTmp).insertOne({idold: id, img: buff });
-			const cursor = {
-				_id: id,
-				name: 'Введите название',
-				name_lat: 'Введите латинское название',
-				url: 'Вставте ссылку на википедию',
-				img: buff };
-			// Создание формы для ввода оставшихся полей
+			
+			loadFR([req.file.buffer]).then(elem =>  {
+				const buff = read_pict(elem[0]);
+				db.collection(collTmp).insertOne({idold: id, img: buff }, (err, rez) => {
+					if (err) {
+						const error = new Error('Ошибка при сохранении изображения во временной БД');
+						error.httpStatusCode = 400;
+						return nexr(error);}
+				});
+				const cursor = {
+					_id: id,
+					name: 'Введите название',
+					name_lat: 'Введите латинское название',
+					url: 'Вставте ссылку на википедию',
+					img: buff };
+					// Создание формы для ввода оставшихся полей
 				res.render('editRecord', { 
 					title: 'Редактирование новой записи (изображение загружено)', 
 					cursor: cursor, 
 					imgfile: 'newnew' });
-					cli.close(); 
+					cli.close();
+			}); 
 		} else {
-			doItDB((db, cli)=>{
+			doItDB((err, db, cli)=>{
+				if (err) { return next(err); }
 				myquery = {idold: id};
 				// Забираем изображение из временного хранилища
 				db.collection(collTmp).findOne(myquery, function(err, doc){
-					if (err) { throw err; }
+					if (err) {
+						const error = new Error('Ошибка при загрузке изображения из временной БД');
+						error.httpStatusCode = 400;
+						return nexr(error);}
 					else {
 						const newRec = { 
 							name: req.body.name,	
@@ -51,12 +65,18 @@ router.post('/:idd', upload.single('img'), function(req, res, next) {
 						// Сохраняем запись в БД
 						db.collection(collName).insert(newRec,
 							function(err, r) {
-								if (err) { throw err; }
-									else {
+								if (err) {
+									const error = new Error('Ошибка при вставке записи в БД');
+									error.httpStatusCode = 400;
+									return nexr(error);}
+								else {
 										// Удаляем изображение из временного хранилища
 										myquery = {idold: id};
 										db.collection(collTmp).deleteMany(myquery, function(err, r) {
-											if (err) { throw err; }
+											if (err) {
+												const error = new Error('Ошибка при удалении изображения из временной БД');
+												error.httpStatusCode = 400;
+												return nexr(error);}
 												else { 
 													cli.close;
 													res.redirect('/');

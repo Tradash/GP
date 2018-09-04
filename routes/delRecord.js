@@ -8,7 +8,10 @@ const delRecord = require('../dbprovider.js').delRecord;
 
 router.get('/:id', function(req, res, next) {
 	const id = req.params.id;
-	delRecord(id, ()=>{res.redirect('/')});
+	delRecord(id, (err)=>{
+		if (err) { return next(err); }; 
+		res.redirect('/');
+	})
 });
 
 module.exports = router;
