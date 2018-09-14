@@ -41,7 +41,7 @@ block content
 			input(type='text', name = 'url', value=furl, disabled = f_dis, placeholder=cursor.url)
 			div
 				img.image(style='width:15%', src = 'data:image/jpeg;base64, ' + cursor.img)
-				span  Загрузите изображение(макс. размер 100к): 
+				span  Загрузите изображение: 
 				input(type='file', name = 'img', accept='image/*, image/jpeg', disabled = f_dis1)
 				input(type='button', value = 'Загрузить', onclick='loadimg()', disabled = f_dis1)
 				script.

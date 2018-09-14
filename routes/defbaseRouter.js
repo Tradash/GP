@@ -1,17 +1,19 @@
-var express = require('express');
-var router = express.Router();
-const AddDefDB = require('../dbprovider.js').AddDefDB;
+const express = require('express');
+// eslint-disable-next-line
+const router = express.Router();
+const addDefDB = require('../dbprovider.js').addDefDB;
 
 
-//console.log(AddDefDB);
+// console.log(AddDefDB);
 router.get('/', function(req, res, next) {
-	AddDefDB((err)=>{
-		if (err) { return next(err); }; 
-		res.redirect('/');
-	});
+  addDefDB((err)=>{
+    if (err) {
+      return next(err);
+    };
+    res.redirect('/');
+  });
 });
 
 module.exports=router;
-	
 
 
