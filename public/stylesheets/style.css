@@ -10,6 +10,8 @@ a {
 .tdinfo {
 	vertical-align:top;
 	position:relative;
+	padding: 10px 10px;
+	line-height: 25px;
 }
 .myTestDBButton {
 		background-image: url(../images/testdb.jpg);
